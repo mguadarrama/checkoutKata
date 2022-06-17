@@ -69,7 +69,7 @@
         private void Buy2x1Strategy()
         {
             Discount discount = GetDiscount();
-            discount.Ammount = (countOfArticlesWithDiscount / 2) * currentArticleReaded.Price;  // Shoud we move this to json file ?
+            discount.Ammount = (TotalArticlesOfThisKindInBasket(currentArticleReaded) / 2) * currentArticleReaded.Price;  // Shoud we move this to json file ?
         }
 
       

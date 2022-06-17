@@ -58,6 +58,31 @@ namespace Novicap
         }
 
 
+        /*
+            The marketing department wants a 2-for-1 special on VOUCHER items.
+            Items: VOUCHER, TSHIRT, VOUCHER
+            Total: 25.00€
+        */
+        [Test]
+        public void FirstScenario2x1DiscountAppliedTwo()
+        {
+            var checkout = new Checkout(priceRules, articlesMaster);
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("VOUCHER"); // 5
+            checkout.Scan("TSHIRT"); // 20
+            checkout.Scan("TSHIRT"); // 20
+            checkout.Scan("TSHIRT"); // 20
+            checkout.Scan("TSHIRT"); // 20
+
+            Assert.AreEqual(checkout.totalAmmount, 96);
+
+        }
+
 
 
         /*
@@ -160,10 +185,6 @@ namespace Novicap
 
                 File.WriteAllText(filename, JsonConvert.SerializeObject(priceRules));
             }
-
-
-
-
 
         }
     }

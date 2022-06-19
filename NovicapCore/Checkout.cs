@@ -31,38 +31,65 @@
         // where you see all the articles on the top, and at the bottom, all the discounts
         public void Scan(string barcode)
         {
-            currentArticleReaded =  articlesMaster.FirstOrDefault(a => a.Name == barcode);
-            if (currentArticleReaded != null)
+            if (IsCurrentArticleValid(barcode))
             {
-                articlesInBasket.Add(currentArticleReaded);
-                currentDiscountToApply = priceRules.FirstOrDefault(a => a.Article.Name == currentArticleReaded.Name);
-                if (currentDiscountToApply != null)
-                {
-                    CalculateDiscounts();
-                }
-                totalDiscountAmmount = discountsItems.Sum(a => a.Ammount);
-                totalAmmount = articlesInBasket.Sum(a => a.Price) - discountsItems.Sum(a => a.Ammount);
+                AddToBasket();
             }
-            else
-            {
-                // TODO: should be an autogeneration of articles readed that not exists in articlesMaster ?
-                throw new NotImplementedException(); 
-            }
+
         }
+
+        private void AddToBasket()
+        {
+            articlesInBasket.Add(currentArticleReaded);
+            if (HasThisArticleDiscountsToApply())
+            {
+                CalculateDiscounts();
+            }
+            CalculateBasketTotals();
+
+        }
+
+
 
         private void CalculateDiscounts()
         {
             countOfArticlesWithDiscount++;
 
-            if (currentDiscountToApply.TypeDiscount ==  TypeDiscountEnum.Buy2x1 &  
+            if (currentDiscountToApply.TypeDiscount == TypeDiscountEnum.Buy2x1 &
                 TotalArticlesOfThisKindInBasket(currentArticleReaded) % 2 == 0)
             {
                 Buy2x1Strategy();
             }
-            else if (currentDiscountToApply.TypeDiscount == TypeDiscountEnum.Buy3AndGetDiscount) 
+            else if (currentDiscountToApply.TypeDiscount == TypeDiscountEnum.Buy3AndGetDiscount)
             {
                 Buy3Strategy();
             }
+        }
+
+
+
+
+
+
+        private void CalculateBasketTotals()
+        {
+            totalDiscountAmmount = discountsItems.Sum(a => a.Ammount);
+            totalAmmount = articlesInBasket.Sum(a => a.Price) - discountsItems.Sum(a => a.Ammount);
+        }
+
+        private bool HasThisArticleDiscountsToApply()
+        {
+            currentDiscountToApply = priceRules.FirstOrDefault(a => a.Article.Name == currentArticleReaded.Name);
+            if (currentDiscountToApply != null) return true;
+            return false;
+            
+        }
+
+        private bool IsCurrentArticleValid(string barcode)
+        {
+            currentArticleReaded = articlesMaster.FirstOrDefault(a => a.Name == barcode);
+            if (currentArticleReaded != null) return true;
+            return false;
         }
 
    
@@ -93,16 +120,6 @@
         {
             return articlesInBasket.Count(a => a.Name == article.Name);
         }
-
-
-
-
-
-
-
-
-
-
 
 
 

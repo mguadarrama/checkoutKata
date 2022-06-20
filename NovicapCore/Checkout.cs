@@ -27,7 +27,7 @@
 
 
 
-        // I thought that could be a good idea to have an object that represent a visual invoice in a supermarket,
+        // I thought that could be a good idea to have an object that represent a paper invoice in a supermarket,
         // where you see all the articles on the top, and at the bottom, all the discounts
         public void Scan(string barcode)
         {
